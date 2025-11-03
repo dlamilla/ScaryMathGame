@@ -1,23 +1,42 @@
 using System;
 using UnityEngine;
 
+public enum Difficulty
+{
+    Easy,
+    Medium,
+    Hard
+}
+
 public class QuestionGenerator : MonoBehaviour
 {
-    public static string GenerateQuestion(int numCount)
+    [Header("Custom values")]
+    public int[] customNumbers;
+    public string[] customOperators;
+
+    public Difficulty currentDifficult = Difficulty.Easy;
+
+    public void Start()
     {
+        GenerateQuestion(currentDifficult);
+    }
+
+    public string GenerateQuestion(Difficulty difficulty)
+    {
+        int numCount = difficulty == Difficulty.Easy ? 2 : difficulty == Difficulty.Medium ? 3 : 4;
+
         int[] numbers = new int[numCount];
-        char[] operators = new char[numCount - 1];
-        System.Random rand = new System.Random();
+        string[] operators = new string[numCount - 1];
 
         for (int i = 0; i < numCount; i++)
         {
-            numbers[i] = rand.Next(0, 10); 
+            numbers[i] = customNumbers[UnityEngine.Random.Range(0,customNumbers.Length)];
         }
 
-        string[] ops = { "+", "-" }; //añadir más operadores si es necesario
+        string[] ops = customOperators;
         for (int i = 0; i < operators.Length; i++)
         {
-            operators[i] = ops[rand.Next(0, ops.Length)][0];
+            operators[i] = ops[UnityEngine.Random.Range(0, customOperators.Length)];
         }
 
         string question = "";

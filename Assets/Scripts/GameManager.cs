@@ -15,30 +15,32 @@ public class GameManager : MonoBehaviour
     public Button hardButton;
     public Button checkButton;
 
+    public QuestionGenerator questionGenerator;
+    private Difficulty currentDifficulty;
+
     private string currentQuestion;
     private int currentAnswer;
-    private int numCount = 2;
 
     public void Start()
     {
-        easyButton.onClick.AddListener(() => SetDifficulty(2));
-        mediumButton.onClick.AddListener(() => SetDifficulty(3));
-        hardButton.onClick.AddListener(() => SetDifficulty(4));
+        easyButton.onClick.AddListener(() => SetDifficulty(Difficulty.Easy));
+        mediumButton.onClick.AddListener(() => SetDifficulty(Difficulty.Medium));
+        hardButton.onClick.AddListener(() => SetDifficulty(Difficulty.Hard));
         checkButton.onClick.AddListener(CheckAnswer);
 
         questionText.text = "";
         feedbackText.text = "Selecciona una dificultad para comenzar.";
     }
 
-    private void SetDifficulty(int count)
+    private void SetDifficulty(Difficulty difficulty)
     {
-        numCount = count;
+        currentDifficulty = difficulty;
         GenerateNewQuestion();
     }
 
     private void GenerateNewQuestion()
     {
-        currentQuestion = QuestionGenerator.GenerateQuestion(numCount);
+        currentQuestion = questionGenerator.GenerateQuestion(currentDifficulty);
         currentAnswer = QuestionGenerator.Evaluate(currentQuestion);
         questionText.text = currentQuestion;
         answerInput.text = "";
